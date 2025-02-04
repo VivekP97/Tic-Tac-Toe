@@ -1,25 +1,15 @@
-export default function GameBoard() {
+import Board from "./components/Board";
+
+export default function App() {
   return (
     <>
+      {/* Container for all the page content */}
       <div className="col-6 mx-auto card p-4 mt-3">
+        {/* Title */}
         <h3 className="text-center">My Tic-Tac-Toe Game</h3>
-        <div className="d-flex flex-column align-items-center my-4">
-          <div className="d-flex">
-            <button className="square">X</button>
-            <button className="square">O</button>
-            <button className="square">X</button>
-          </div>
-          <div className="d-flex">
-            <button className="square">O</button>
-            <button className="square">X</button>
-            <button className="square">O</button>
-          </div>
-          <div className="d-flex">
-            <button className="square">X</button>
-            <button className="square">O</button>
-            <button className="square">X</button>
-          </div>
-        </div>
+
+        {/* Tic-Tac-Toe Board */}
+        <Board />
       </div>
     </>
   );
