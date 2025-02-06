@@ -5,11 +5,30 @@ export default function Board() {
   /* Initialize the board data to keep track of the game state */
   const [gameState, setGameState] = useState([null, null, null, null, null, null, null, null, null]);
 
+  /* Initialize state for keeping track of user turns */
+  const [xIsNext, setXIsNext] = useState(true);
+
   /* This function is triggered when a square is clicked */
   function handleSquareClick(i) {
     const newGameState = gameState.slice();
-    newGameState[i] = "X";
+
+    // Ensure the selected square was not already set
+    if (newGameState[i] !== null) {
+      // This square was already selected.
+      return;
+    }
+
+    // determine the next value to set
+    if (xIsNext) {
+      newGameState[i] = "X";
+    } else {
+      newGameState[i] = "O";
+    }
+
     setGameState(newGameState);
+
+    // Toggle 'xIsNext'
+    setXIsNext(!xIsNext)
   }
 
   return (
