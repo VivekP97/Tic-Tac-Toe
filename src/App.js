@@ -21,6 +21,21 @@ export default function App() {
     setXIsNext(!xIsNext);
   }
 
+  // Function to undo the last move
+  function undoMove() {
+    // Remove the last element of 'history' and set that as the new value
+    setHistory(history.slice(0, history.length-1));
+    setXIsNext(!xIsNext);
+  }
+
+  // Function to reset the game board
+  function resetBoard() {
+    setHistory([
+      [null, null, null, null, null, null, null, null, null]
+    ]);
+    setXIsNext(true);
+  }
+
 
   return (
     <>
@@ -31,6 +46,12 @@ export default function App() {
 
         {/* Tic-Tac-Toe Board */}
         <Board xIsNext={xIsNext} currGameState={currGameState} handleMove={handleMove} />
+
+        {/* Game control buttons */}
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-primary btn-sm me-2" disabled={history.length===1} onClick={undoMove}>Undo</button>
+          <button class="btn btn-danger btn-sm" onClick={resetBoard}>Reset</button>
+        </div>
       </div>
     </>
   );
