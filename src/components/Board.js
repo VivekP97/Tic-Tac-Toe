@@ -13,26 +13,37 @@ export default function Board() {
     const newGameState = gameState.slice();
 
     // Ensure the selected square was not already set
-    if (newGameState[i] !== null) {
-      // This square was already selected.
+    if (newGameState[i] !== null || calculateWinner(newGameState) !== null) {
+      // This square was already selected OR this board has a winner already.
       return;
     }
 
-    // determine the next value to set
-    if (xIsNext) {
-      newGameState[i] = "X";
-    } else {
-      newGameState[i] = "O";
-    }
-
+    // Set the next value on the selected square
+    newGameState[i] = xIsNext ? "X" : "O";
     setGameState(newGameState);
 
     // Toggle 'xIsNext'
     setXIsNext(!xIsNext)
   }
 
+  // Check for a winner
+  let currStatus = "";
+  const winner = calculateWinner(gameState);
+  if (!!winner) {
+    // There is a winner.
+    currStatus = "The winner is '" + winner + "'!";
+  } else if (!boardHasMoves(gameState)) {
+    // The board does not have any remaining moves.
+    currStatus = "The game is a draw!";
+  } else {
+    currStatus = "Next move is '" + (xIsNext ? "X" : "O") + "'";
+  }
+
   return (
     <>
+      {/* Status message */}
+      <p id="status-message" class="text-center mb-0">{currStatus}</p>
+
       {/* Tic-Tac-Toe Board */}
       <div className="d-flex flex-column align-items-center my-4">
         {/* Row 1 */}
@@ -58,4 +69,52 @@ export default function Board() {
       </div>
     </>
   );
+}
+
+/**
+ * Function to determine whether the board has a winner. 
+ * @returns - Returns 'X', 'O', or null to indicate the winner or lack thereof.
+ * */
+function calculateWinner(board) {
+  // Define all possible winning lines
+  const winningLines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  // iterate through all winning lines and check the board
+  for (let lineIndex = 0; lineIndex < winningLines.length; lineIndex++) {
+    const [i, j, k] = winningLines[lineIndex];
+
+    // check the board
+    if (!!board[i] && board[i] === board[j] && board[i] === board[k]) {
+      // This board has a winner!
+      return board[i];
+    }
+  }
+
+  // This board does not have a winner.
+  return null;
+}
+
+/**
+ * Function to check if there are any more moves to play.
+ * @returns - A boolean indicating whether there are any remaining moves.
+ */
+function boardHasMoves(board) {
+  // Iterate through the board and see if there are any empty squares.
+  for (let i = 0; i < board.length; i++) {
+    if (!board[i]) {
+      // There is an empty square.
+      return true;
+    }
+  }
+
+  return false;
 }
